@@ -1,0 +1,30 @@
+# Maintainer: Ybenel(m1ndo) <m1ndo@pm.me>
+
+pkgname=darkos-hellconf
+_pkgname=darkos-hellconf
+_gitname=OneHell-Config
+_destname1="/etc"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=1.8
+pkgrel=0
+pkgdesc="DarkOs One Hell Configurations Contains Xmonad,HerbstluftWM,AwesomeWM,Qtile And Other Configs"
+arch=('any')
+url="https://github.com/DarkOs-Arch/OneHell-Config"
+license=('GPL2')
+makedepends=('git')
+depends=()
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+#source=(${pkgname}::"git+${url}")
+source=("git://github.com/DarkOs-Arch/OneHell-Config")
+sha256sums=('SKIP')
+prepare() {
+  cd "${srcdir}/${_gitname}"
+  git submodule update --init
+  ls -la "${srcdir}/${_gitname}"
+}
+package() {
+  install -dm755 "$pkgdir/$_licensedir/$_pkgname"
+  install -m644 "$srcdir/$_gitname/LICENSE" "$pkgdir/$_licensedir/$_pkgname"
+  cp -r $srcdir/$_gitname$_destname1 $pkgdir$_destname1
+}

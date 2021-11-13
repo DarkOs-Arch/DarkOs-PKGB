@@ -1,0 +1,22 @@
+# Maintainer: Ybenel <ybenel@pm.me>
+pkgname=darkos-wallpapers
+_pkgname=darkos-wallpapers
+pkgver=11
+pkgrel=0
+pkgdesc="List Of Wallpapers Provided In DarkOs"
+arch=('any')
+url="https://ybenel.cf/photos/"
+license=('Creative Commons')
+makedepends=('git')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+package() {
+	cd "${srcdir}/${pkgname}"
+	install -d "${pkgdir}/usr/share/backgrounds/darkos"
+	install -m644 ${srcdir}/${pkgname}/*.jpg "${pkgdir}/usr/share/backgrounds/darkos"
+	install -m644 ${srcdir}/${pkgname}/*.png "${pkgdir}/usr/share/backgrounds/darkos"
+	#install -d "${pkgdir}/usr/share/darkos/licenses/${_pkgname}"
+	#install -m644 ${srcdir}/${pkgname}/LICENSE "${pkgdir}/usr/share/darkos/licenses/${_pkgname}"
+}

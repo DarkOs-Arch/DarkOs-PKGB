@@ -1,0 +1,79 @@
+#https://github.com/calamares/calamares/releases
+# KPMCORE 4
+pkgname=darkos-calamares
+_pkgname=calamares
+pkgver=3.2.44.2
+pkgrel=1
+pkgdesc='Distribution-independent installer framework'
+arch=('i686' 'x86_64')
+license=(GPL)
+url="https://github.com/calamares/calamares/releases"
+license=('LGPL')
+depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'kio' 'solid' 'yaml-cpp' 'kpmcore' 'mkinitcpio-openswap'
+         'boost-libs' 'ckbcomp' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework'
+         'qt5-xmlpatterns' 'squashfs-tools' 'libpwquality' 'efibootmgr')
+conflicts=('arco-calamares' 'arco-calamares-comp' 'arco-calamares-dev')
+makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost')
+backup=('usr/share/calamares/modules/bootloader.conf'
+        'usr/share/calamares/modules/displaymanager.conf'
+        'usr/share/calamares/modules/initcpio.conf'
+        'usr/share/calamares/modules/unpackfs.conf')
+source=("$_pkgname-$pkgver::$url/download/v$pkgver/$_pkgname-$pkgver.tar.gz"
+        "ucode_main.py"
+        "ucode_module.desc"
+        "dm_main.py"
+        "umount_module.desc")
+sha256sums=('f8ac63bcc94cce265bf8c300c47752d17c466d096198bb08745aa16938a6548d'
+	"85926b4929d87992eb6ec3bb624c2dca77a1a6d6d36c67846098cb499f1f53f6"
+	"830b6e2efaf794dd3c0503dc990249742ac97b8a92a414b2c1cdc9d562864aed"
+	"be27d292b29cd29ef79ab1975f9e6b1497f96987d862698f7ef04bf4e4a5ed55"
+	"0a9eb0362012374f977a620b9f9f7e23befa8c9695b78b0f77d2d535877f9104")
+pkgver() {
+	cd ${srcdir}/$_pkgname-$pkgver
+	_ver="$(cat CMakeLists.txt | grep -m3 -e "  VERSION" | grep -o "[[:digit:]]*" | xargs | sed s'/ /./g')"
+	#_git=".r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
+	printf '%s%s' "${_ver}" #"${_git}"
+}
+
+prepare() {
+
+	sed -i -e 's/"Install configuration files" OFF/"Install configuration files" ON/' "$srcdir/${_pkgname}-${pkgver}/CMakeLists.txt"
+	sed -i -e 's/# DEBUG_FILESYSTEMS/DEBUG_FILESYSTEMS/' "$srcdir/${_pkgname}-${pkgver}/CMakeLists.txt"
+
+	# add pkgrelease to patch-version
+	cd ${_pkgname}-${pkgver}
+	_patchver="$(cat CMakeLists.txt | grep -m3 -e CALAMARES_VERSION_PATCH | grep -o "[[:digit:]]*" | xargs)"
+	sed -i -e "s|CALAMARES_VERSION_PATCH $_patchver|CALAMARES_VERSION_PATCH $_patchver-$pkgrel|g" CMakeLists.txt
+
+	install -Dm644 "${srcdir}/"ucode_main.py ${srcdir}/$_pkgname-$pkgver/src/modules/ucode/main.py
+	install -Dm644 "${srcdir}/"ucode_module.desc ${srcdir}/$_pkgname-$pkgver/src/modules/ucode/module.desc
+	install -Dm644 "${srcdir}/"dm_main.py ${srcdir}/$_pkgname-$pkgver/src/modules/displaymanager/main.py
+	install -Dm644 "${srcdir}/"umount_module.desc ${srcdir}/$_pkgname-$pkgver/src/modules/umount/module.desc
+	
+}
+
+build() {
+	cd $_pkgname-$pkgver
+
+	mkdir -p build
+	cd build
+	cmake .. \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_INSTALL_LIBDIR=lib \
+	-DWITH_PYTHONQT=OFF \
+	-DWITH_KF5DBus=OFF \
+	-DBoost_NO_BOOST_CMAKE=ON \
+	-DWEBVIEW_FORCE_WEBKIT=OFF \
+	-DSKIP_MODULES="tracking webview interactiveterminal initramfs \
+	initramfscfg dracut dracutlukscfg \
+	dummyprocess dummypython dummycpp \
+	dummypythonqt services-openrc keyboardq localeq welcomeq"
+	make
+}
+
+package() {
+	cd ${_pkgname}-${pkgver}/build
+	make DESTDIR="$pkgdir" install
+	rm "$pkgdir/usr/share/applications/calamares.desktop"
+}

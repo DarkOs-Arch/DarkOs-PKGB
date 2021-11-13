@@ -1,0 +1,42 @@
+# Maintainer: Maxime Gauduin <alucrydarchlinux.org>
+# Contributor: Padfoot <padfoot@exemail.com.au>
+# Source : https://launchpad.net/lightdm-gtk-greeter
+# Edited by Erik Dubois for ArcoLinux
+# Edited By Ybenel for DarkOs
+pkgname=darkos-lightdm
+pkgver=2.0.7
+pkgrel=1
+epoch=1
+pkgdesc='DarkOs settings for GTK+ greeter for LightDM'
+arch=('x86_64')
+url='https://launchpad.net/lightdm-gtk-greeter'
+license=('GPL3' 'LGPL3')
+depends=('gtk3' 'lightdm')
+makedepends=('exo' 'gobject-introspection' 'intltool')
+replaces=('lightdm-gtk2-greeter' 'lightdm-gtk3-greeter' 'lightdm-gtk-greeter')
+backup=('etc/lightdm/lightdm-gtk-greeter.conf')
+source=("https://launchpad.net/lightdm-gtk-greeter/${pkgver%.?}/${pkgver}/+download/lightdm-gtk-greeter-${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd lightdm-gtk-greeter-${pkgver}
+
+  export CFLAGS="$CFLAGS -Wno-declaration-after-statement"
+
+  ./configure \
+    --prefix='/usr' \
+    --libexecdir='/usr/lib/lightdm' \
+    --sbindir='/usr/bin' \
+    --sysconfdir='/etc' \
+    --with-libxklavier \
+    --enable-kill-on-sigterm \
+    --disable-libido \
+    --disable-libindicator \
+    --disable-static
+  make
+}
+
+package() {
+  cd lightdm-gtk-greeter-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}

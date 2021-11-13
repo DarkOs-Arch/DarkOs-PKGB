@@ -1,0 +1,25 @@
+# Maintainer: Ybenel(r2dr0dn) <r2dr0dn@pm.me>
+pkgname=darkos-plasma-config
+_pkgname=darkos-plasma-config
+_destname="/etc"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=1.0
+pkgrel=8
+pkgdesc="Some Configuration For DarkOs To Make Easy User Experience"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-plasma-config"
+license=('GPL')
+makedepends=('git')
+conflicts=()
+depends=()
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+install='readme.install'
+package() {
+	install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+	install -m644  ${srcdir}/${_pkgname}/LICENSE ${pkgdir}${_licensedir}${_pkgname}
+
+	cp -r  ${srcdir}/${_pkgname}${_destname} ${pkgdir}${_destname}
+}

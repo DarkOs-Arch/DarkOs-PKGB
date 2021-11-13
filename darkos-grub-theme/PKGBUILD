@@ -1,0 +1,24 @@
+pkgname=darkos-grub-theme
+_pkgname=darkos-grub-theme
+_destname="/boot/grub/themes/darkos-arch"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=10.1
+pkgrel=1
+pkgdesc="DarkOs Minimal Grub2 Theme"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-grub-theme"
+license=('GPL3')
+makedepends=('git')
+conflicts=()
+depends=('grub')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+package() {
+        install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+        install -m644  ${srcdir}/${_pkgname}/LICENSE ${pkgdir}${_licensedir}${_pkgname}
+
+	install -dm755 ${pkgdir}${_destname}
+        cp -r  ${srcdir}/${_pkgname}/theme/* ${pkgdir}${_destname}
+}

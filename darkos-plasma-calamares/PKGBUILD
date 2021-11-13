@@ -1,0 +1,25 @@
+# Maintainer: Ybenel <r2r0dn@pm.me>
+pkgname=darkos-calamares-plasma
+_pkgname=darkos-calamares-plasma
+_destname="/etc/calamares"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=10.1
+pkgrel=1
+pkgdesc="A Minimal Configurations For Calamares ( One Hell Edition )"
+arch=('any')
+url="https://github.com/darkos-arch/${_pkgname}"
+license=('GPL3')
+makedepends=('git')
+depends=()
+conflicts=('darkos-calamares-multi' 'darkos-calamares-config')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/darkos-arch/${_pkgname}.git")
+sha256sums=('SKIP')
+install='readme.install'
+package() {
+	mkdir -p "${pkgdir}${_licensedir}${_pkgname}"
+	mv "${srcdir}/${_pkgname}/"LICENSE "${pkgdir}${_licensedir}${_pkgname}/LICENSE"
+	mkdir -p "${pkgdir}${_destname}"
+	cp -r "${srcdir}/${_pkgname}/calamares/"* "${pkgdir}${_destname}"
+}

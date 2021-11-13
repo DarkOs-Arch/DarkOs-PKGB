@@ -1,0 +1,24 @@
+# Maintainer: Ybenel(r2dr0dn) <r2dr0dn@pm.me>
+
+pkgname=darkos-live-config
+_pkgname=darkos-live-config
+_destname1="/etc"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=8.0
+pkgrel=8
+pkgdesc="Configuration Files Needed For DarkOs Live Session And After Install"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-live-config"
+license=('GPL')
+makedepends=('git')
+depends=()
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+package() {
+  install -dm755 "$pkgdir/$_licensedir/$_pkgname"
+  install -m644 "$srcdir/$pkgname/LICENSE" "$pkgdir/$_licensedir/$_pkgname"
+
+  cp -r $srcdir/$pkgname$_destname1 $pkgdir$_destname1
+}

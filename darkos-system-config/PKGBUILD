@@ -1,0 +1,69 @@
+# Maintainer: Ybenel <r2dr0dn@pm.me>
+
+pkgname=darkos-system-config
+_pkgname=darkos-system-config
+_destname2="/etc/modprobe.d"
+_destname4="/etc/X11/xorg.conf.d"
+_destname6="/usr/share/icons/hicolor/"
+_destname5="/var/lib/AccountsService/icons/"
+_destname0="/usr/share/fonts/Nerd-Fonts/"
+_destname12="/usr/share/fonts/Fira-Code/"
+_destname13="/usr/share/fonts/SF-Pro/"
+_destname1="/usr/share/fonts/scientifica/"
+_dest="/usr/share/fonts/"
+_destname7="/usr/local/bin"
+_destname8="/usr/lib/systemd/system"
+_destname9="/etc/samba"
+_destname10="/etc/pacman.d/hooks/"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=1.5
+pkgrel=0
+pkgdesc="Configuration Files Needed For DarkOs"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-system-config"
+license=('GPL3')
+makedepends=('git')
+depends=('accountsservice' 'lightdm')
+provides=("${pkgname}")
+options=( !strip !emptydirs )
+source=(${pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+install='readme.install'
+package() {
+  install -dm755 "$pkgdir/$_licensedir/$_pkgname"
+  install -m644 "$srcdir/$pkgname/LICENSE" "$pkgdir/$_licensedir/$_pkgname"
+  rm -f "$srcdir/$pkgname/upload.sh"
+
+  install -dm755 "$pkgdir$_destname2"
+  install -m644 "$srcdir/$pkgname/$_destname2/"* "$pkgdir$_destname2"
+
+  install -dm755 "$pkgdir$_destname4"
+  install -m644 "$srcdir/$pkgname/$_destname4/"* "$pkgdir$_destname4"
+
+  install -dm755 "$pkgdir$_destname6"
+  cp -r "$srcdir/$pkgname/$_destname6/"* "$pkgdir$_destname6"
+
+  install -dm755 "$pkgdir$_destname7"
+  install -m755 "$srcdir/$pkgname/$_destname7/"* "$pkgdir$_destname7"
+
+  install -dm755 "$pkgdir$_destname8"
+  install -m644 "$srcdir/$pkgname/$_destname8/"* "$pkgdir$_destname8"
+
+  install -dm755 "$pkgdir$_destname10"
+  install -m644 "$srcdir/$pkgname/$_destname10/"* "$pkgdir$_destname10"
+
+  install -dm755 "$pkgdir$_destname5"
+  install -m644 "$srcdir/$pkgname/$_destname5/"* "$pkgdir$_destname5"
+
+  install -dm755 "$pkgdir$_destname0"
+  install -m644 "$srcdir/$pkgname/$_destname0/"* "$pkgdir$_destname0"
+
+  install -dm755 "$pkgdir$_destname12"
+  cp -r "$srcdir/$pkgname/$_destname12/" "$pkgdir$_destname12"
+
+  install -dm755 "$pkgdir$_destname13"
+  cp -r "$srcdir/$pkgname/$_destname13/" "$pkgdir$_destname13"
+
+  install -dm755 "$pkgdir$_destname1"
+  cp -r "$srcdir/$pkgname/$_destname1/" "$pkgdir$_dest"
+}

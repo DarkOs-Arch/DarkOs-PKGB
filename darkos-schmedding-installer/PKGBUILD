@@ -1,0 +1,19 @@
+# Maintainer: Nathaniel Maia <natemaia10@gmail.com>
+# Editor: ybenel <r2dr0dn@pm.me>
+
+pkgname=darkos-schmedding-installer
+pkgver=1.0
+pkgrel=2
+pkgdesc="CLI based installer for DarkOs Linux (Schmedding)"
+url="https://github.com/DarkOs-Arch/darkos-schmedding-installer"
+arch=('x86_64')
+license=('GPL3')
+depends=('dialog' 'awk' 'curl' 'sed' 'parted' 'rsync' 'coreutils' 'findutils' 'util-linux' 'arch-install-scripts')
+source=(git+$url.git)
+sha256sums=('SKIP')
+
+package()
+{
+    mkdir -p $pkgdir/usr/bin
+    install -Dm755 ${srcdir}/${pkgname}/installer $pkgdir/usr/bin/
+}

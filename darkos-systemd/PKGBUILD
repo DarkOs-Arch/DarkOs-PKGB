@@ -1,0 +1,29 @@
+# Maintainer: Ybenel <r2dr0dn@pm.me>
+pkgname=darkos-systemd
+_pkgname=darkos-systemd
+_destname1="/usr/lib/systemd/system"
+_destname2="/usr/local/bin"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=10.0
+pkgrel=1
+pkgdesc="Services Needed For DarkOs"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-systemd"
+license=('GPL3')
+makedepends=('git')
+depends=()
+install='readme.install'
+provides=("${pkgname}")
+options=( !strip !emptydirs )
+source=(${pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+package() {
+  install -dm755 "$pkgdir/$_licensedir/$_pkgname"
+  install -m644 "$srcdir/$pkgname/LICENSE" "$pkgdir/$_licensedir/$_pkgname"
+
+  install -dm755 "$pkgdir$_destname1"
+  install -m644 "$srcdir/$pkgname/$_destname1/"* "$pkgdir$_destname1"
+
+  install -dm755 "$pkgdir$_destname2"
+  cp "$srcdir/$pkgname/$_destname2/"* "$pkgdir$_destname2"
+}

@@ -1,0 +1,25 @@
+# Maintainer: Ybenel <ybenel@pm.me>
+pkgname=darkos-calamares-config
+_pkgname=darkos-calamares-config
+_destname="/etc/calamares"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=12.0
+pkgrel=4
+pkgdesc="Configuration Files For Calamares DarkOs Installer"
+arch=('any')
+url="https://github.com/darkos-arch/${_pkgname}"
+license=('GPL3')
+makedepends=('git')
+depends=()
+conflicts=('darkos-calamares-multi')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/darkos-arch/${_pkgname}.git")
+sha256sums=('SKIP')
+install='readme.install'
+package() {
+	mkdir -p "${pkgdir}${_licensedir}${_pkgname}"
+	mv "${srcdir}/${_pkgname}/"LICENSE "${pkgdir}${_licensedir}${_pkgname}/LICENSE"
+	mkdir -p "${pkgdir}${_destname}"
+	cp -r "${srcdir}/${_pkgname}/calamares/"* "${pkgdir}${_destname}"
+}

@@ -1,0 +1,18 @@
+
+post_install() {
+	systemctl enable virtual-machine-check.service
+	systemctl start virtual-machine-check.service
+}
+
+post_upgrade() {
+  systemctl disable update-mirror.service
+	systemctl enable virtual-machine-check.service
+	systemctl start virtual-machine-check.service
+}
+
+
+post_remove() {
+	systemctl enable update-mirror.service
+	#scripts removes it
+	systemctl disable virtual-machine-check.service
+}

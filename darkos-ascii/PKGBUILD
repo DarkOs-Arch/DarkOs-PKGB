@@ -1,0 +1,25 @@
+# Maintainer: Ybenel <r2dr0dn@pm.me>
+pkgname=darkos-ascii
+_pkgname=darkos-ascii
+_destname1="/etc/skel/.bin/"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=10.1
+pkgrel=3
+pkgdesc="A Collection Of Ascii Script To Make Your Terminal Look Better"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-ascii"
+license=('GPL3')
+makedepends=('git')
+depends=('bash')
+provides=("${pkgname}")
+#options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+install='readme.install'
+package() {
+	install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+	install -m644  ${srcdir}/${_pkgname}/LICENSE ${pkgdir}${_licensedir}${_pkgname}
+
+	install -dm755 ${pkgdir}${_destname1}
+	cp -r  ${srcdir}/${_pkgname}${_destname1}* ${pkgdir}${_destname1}
+}

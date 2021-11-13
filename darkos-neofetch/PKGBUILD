@@ -1,0 +1,25 @@
+# Maintainer: Ybenel <r2dr0dn@pm.me>
+pkgname=darkos-neofetch
+_pkgname=darkos-neofetch
+_destname1="/usr/bin/"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=10.0
+pkgrel=1
+pkgdesc="DarkOs Neofetch Build"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-neofetch"
+license=('GPL3')
+makedepends=('git')
+depends=('bash')
+provides=("${pkgname}")
+#options=(!strip !emptydirs)
+source=(${_pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+package() {
+	install -dm755 ${pkgdir}${_licensedir}${_pkgname}
+	install -m644  ${srcdir}/${_pkgname}/LICENSE ${pkgdir}${_licensedir}${_pkgname}
+	rm  ${srcdir}/${_pkgname}/upload.sh
+	install -dm755 ${pkgdir}${_destname1}
+	cp  ${srcdir}/${_pkgname}/neofetch ${pkgdir}${_destname1}
+
+}

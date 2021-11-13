@@ -1,0 +1,20 @@
+# Maintainer: Ybenel <r2dr0dn@pm.me>
+
+pkgname=darkos-keyring
+pkgver=10.0
+pkgrel=1
+pkgdesc='DarkOs Linux keyring'
+url='https://github.com/DarkOs-Arch/darkos-keyring'
+arch=('x86_64')
+license=(GPL)
+install=${pkgname}.install
+source=(git+$url.git)
+sha256sums=('SKIP')
+
+package() {
+    cd darkos-keyring/ || return
+    mkdir -p $pkgdir/usr/share/pacman/keyrings
+    install -m 644 darkos-trusted $pkgdir/usr/share/pacman/keyrings
+    install -m 644 darkos-revoked $pkgdir/usr/share/pacman/keyrings
+    install -m 644 darkos.gpg $pkgdir/usr/share/pacman/keyrings
+}

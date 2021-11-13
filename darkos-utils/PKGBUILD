@@ -1,0 +1,35 @@
+# Maintainer: Ybenel <ybenel@molero.xyz>
+
+pkgname=darkos-utils
+_pkgname=darkos-utils
+_destname2="/opt/crowbar"
+_destname4="/opt/php-webshells"
+_destname6="/opt/phpggc"
+_destname3="/opt/PowerSploit"
+_licensedir="/usr/share/darkos/licenses/"
+pkgver=1.0
+pkgrel=0
+pkgdesc="Some ExtraTools That Don't Exists In The AUR For Pentesters"
+arch=('any')
+url="https://github.com/DarkOs-Arch/darkos-utils"
+license=('GPL3')
+makedepends=('git')
+depends=('python' 'php')
+provides=("${pkgname}")
+options=( !strip !emptydirs )
+source=(${pkgname}::"git+https://github.com/DarkOs-Arch/${_pkgname}")
+sha256sums=('SKIP')
+#install='readme.install'
+package() {
+  install -dm755 "$pkgdir/$_licensedir/$_pkgname"
+  install -m644 "$srcdir/$pkgname/LICENSE" "$pkgdir/$_licensedir/$_pkgname"
+  rm -f "$srcdir/$pkgname/upload.sh"
+  mkdir -p "$pkgdir$_destname2"
+  cp -r "$srcdir/$pkgname/$_destname2/"* "$pkgdir$_destname2"
+  mkdir -p "$pkgdir$_destname4"
+  cp -r "$srcdir/$pkgname/$_destname4/"* "$pkgdir$_destname4"
+  mkdir -p "$pkgdir$_destname6"
+  cp -r "$srcdir/$pkgname/$_destname6/"* "$pkgdir$_destname6"
+  mkdir -p "$pkgdir$_destname3"
+  cp -r "$srcdir/$pkgname/$_destname3/"* "$pkgdir$_destname3"
+}

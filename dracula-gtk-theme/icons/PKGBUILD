@@ -1,0 +1,24 @@
+# Maintainer: ybenel <ybenel@pm.me> 
+
+pkgname=dracula-icons
+_pkgname=Dracula
+pkgver=v1.0
+pkgrel=1
+pkgdesc="Dracula Icon Theme."
+arch=("any")
+url="https://github.com/dracula/gtk"
+license=('GPL')
+optdepends=('ttf-roboto: primary font face defined'
+	'ttf-ubuntu-font-family: secondary font face defined'
+	'cantarell-fonts: tertiary font face defined')
+source=("${pkgname}-$pkgver.tar.gz::https://github.com/dracula/gtk/files/5214870/Dracula.zip")
+sha256sums=('33ad2819efb4fe5f612e32cb3959772c1a475608ef054e237d27278ec30bccb6')
+provides=($pkgname)
+conflicts=($pkgname)
+
+package() {
+	cd "${srcdir}/${_pkgname}"
+
+	mkdir -p "${pkgdir}/usr/share/icons/${_pkgname}"
+	cp -a "${srcdir}/${_pkgname}/"* "${pkgdir}/usr/share/icons/${_pkgname}/"
+}
