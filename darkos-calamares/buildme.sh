@@ -16,13 +16,13 @@ tput sgr1
 echo "# Let's start packaging"
 echo "#############################################"
 #makechrootpkg -c -r $CHROOT
-makepkg -s
+makepkg -c -C -s
 tput setaf 5
 echo "#############################################"
 tput setaf 4
 echo "#############################################" 
 echo "# Let's sign our packages"
-gpg --detach-sign darkos*.pkg.tar.xz
+gpg --detach-sign darkos*.pkg.tar.zst
 tput setaf 8
 echo "#############################################" 
 echo "# Done :D "
