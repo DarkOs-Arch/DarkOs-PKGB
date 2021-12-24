@@ -1,0 +1,49 @@
+# Maintainer: Filipe Laíns (FFY00) <lains@archlinux.org>
+# Contributor: Dustin Falgout <dustin@antergos.com>
+
+pkgname=darkos-webkit2-greeter
+_pkgname=web-greeter
+pkgver=2.2.5
+pkgrel=4
+pkgdesc='LightDM greeter that uses WebKit2 for theming via HTML/JavaScript.'
+arch=('x86_64')
+url='https://github.com/antergos/web-greeter'
+license=('GPL3')
+depends=('lightdm' 'webkit2gtk' 'accountsservice' 'gnome-backgrounds')
+makedepends=('gobject-introspection' 'meson' 'gettext' 'dbus-glib')
+backup=("etc/lightdm/lightdm-webkit2-greeter.conf")
+conflicts=("lightdm-webkit2-greeter")
+source=("$_pkgname-$pkgver.tar.gz::$url/archive/$pkgver.tar.gz"
+        'darkos-logo.png'
+        'darkos-user.png')
+sha512sums=('173fe64dc3ff9bde0bc3d72319ab014001364eae8336a72b052333e0c6687167164277fd87de7051c689f12f64aeb441f95a9f0d38cc780ccb77751ab62204da'
+            'a7a46834765e1311d41aaaf770308f793c1ed46760d7e1b01ccc1c4aee9bf61d85423f00f274ee392bb4e80c5cf82b69573912ae544ff405f73195301660490c'
+            '911df1fe12592b03a9d8879ea9f4e0bc3c2e2eec0cf443c86e8fbc2c953929414905b27b8c4e9d254f5d568e49e2ca4b0178e8d6fa2a29bccc5db20e1a91502c')
+
+prepare() {
+  cd $_pkgname-$pkgver
+
+  # Replace antergos logos
+  sed -i \
+  	-e 's|/usr.*antergos.png|/usr/share/pixmaps/darkos-logo.png|g;' \
+  	-e 's|/usr.*logo-user.png|/usr/share/pixmaps/darkos-user.png|g' \
+  	"data/lightdm-webkit2-greeter.conf"
+}
+
+build() {
+  cd $_pkgname-$pkgver/build
+
+  arch-meson ..
+
+  ninja
+}
+
+package() {
+
+  mkdir -p "$pkgdir/usr/share/pixmaps/"
+  install -m755 darkos-*.png "$pkgdir/usr/share/pixmaps/"
+
+  cd $_pkgname-$pkgver/build
+
+  DESTDIR="$pkgdir" ninja install
+}
